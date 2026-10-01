@@ -4,42 +4,40 @@
  * Menggunakan Web Storage API (localStorage) untuk persistensi data penuh.
  */
 
-// Data Katalog Bawaan (Default Master Data)
+// Data Katalog Bawaan Menu F&B & Cafe
 const DEFAULT_PRODUCTS = [
-  // F&B - Makanan
+  // Makanan Utama
   { id: 'F01', name: 'Nasi Goreng Spesial', category: 'food', price: 25000, stock: 45, icon: '🍛', sku: 'FOOD-NG01' },
   { id: 'F02', name: 'Ayam Geprek Sambal Bawang', category: 'food', price: 22000, stock: 30, icon: '🍗', sku: 'FOOD-AG02' },
   { id: 'F03', name: 'Mie Goreng Aceh Daging', category: 'food', price: 28000, stock: 25, icon: '🍜', sku: 'FOOD-MA03' },
   { id: 'F04', name: 'Beef Burger Deluxe', category: 'food', price: 35000, stock: 20, icon: '🍔', sku: 'FOOD-BB04' },
-  { id: 'F05', name: 'French Fries Crispy', category: 'food', price: 16000, stock: 50, icon: '🍟', sku: 'FOOD-FF05' },
+  { id: 'F05', name: 'Rice Bowl Chicken Katsu', category: 'food', price: 26000, stock: 35, icon: '🍱', sku: 'FOOD-RCK05' },
   { id: 'F06', name: 'Spaghetti Bolognese', category: 'food', price: 32000, stock: 18, icon: '🍝', sku: 'FOOD-SB06' },
 
-  // F&B - Minuman
+  // Minuman & Kopi
   { id: 'B01', name: 'Kopi Susu Gula Aren', category: 'beverage', price: 18000, stock: 80, icon: '☕', sku: 'DRK-KSA01' },
   { id: 'B02', name: 'Matcha Latte Ice', category: 'beverage', price: 24000, stock: 40, icon: '🍵', sku: 'DRK-ML02' },
   { id: 'B03', name: 'Es Lemon Tea Segar', category: 'beverage', price: 12000, stock: 65, icon: '🍹', sku: 'DRK-ELT03' },
   { id: 'B04', name: 'Americano Double Shot', category: 'beverage', price: 16000, stock: 55, icon: '☕', sku: 'DRK-ADS04' },
-  { id: 'B05', name: 'Air Mineral 600ml', category: 'beverage', price: 5000, stock: 120, icon: '💧', sku: 'DRK-AQ05' },
-  { id: 'B06', name: 'Fresh Orange Juice', category: 'beverage', price: 18000, stock: 30, icon: '🍊', sku: 'DRK-OJ06' },
+  { id: 'B05', name: 'Caramel Macchiato Ice', category: 'beverage', price: 25000, stock: 40, icon: '🧋', sku: 'DRK-CMA05' },
+  { id: 'B06', name: 'Air Mineral 600ml', category: 'beverage', price: 5000, stock: 120, icon: '💧', sku: 'DRK-AQ06' },
+  { id: 'B07', name: 'Fresh Orange Juice', category: 'beverage', price: 18000, stock: 30, icon: '🍊', sku: 'DRK-OJ07' },
 
-  // Retail - Snack & Groceries
-  { id: 'R01', name: 'Keripik Kentang Truffle', category: 'retail', price: 14500, stock: 40, icon: '🥔', sku: '899100123' },
-  { id: 'R02', name: 'Cokelat Silverqueen 58g', category: 'retail', price: 17500, stock: 35, icon: '🍫', sku: '899100124' },
-  { id: 'R03', name: 'Biskuit Gandum Sehat', category: 'retail', price: 9500, stock: 60, icon: '🍪', sku: '899100125' },
-  { id: 'R04', name: 'Kacang Almond Roasted', category: 'retail', price: 25000, stock: 22, icon: '🥜', sku: '899100126' },
-
-  // Retail - Essentials
-  { id: 'E01', name: 'Tissue Basah Antiseptik', category: 'essentials', price: 8500, stock: 50, icon: '🧻', sku: '899200001' },
-  { id: 'E02', name: 'Hand Sanitizer Pocket 50ml', category: 'essentials', price: 10000, stock: 45, icon: '🧴', sku: '899200002' },
-  { id: 'E03', name: 'Tote Bag Belanja Eco', category: 'essentials', price: 15000, stock: 100, icon: '🛍️', sku: '899200003' }
+  // Snack & Dessert Cafe
+  { id: 'S01', name: 'French Fries Crispy', category: 'snack', price: 16000, stock: 50, icon: '🍟', sku: 'SNK-FF01' },
+  { id: 'S02', name: 'Roti Bakar Cokelat Keju', category: 'snack', price: 18000, stock: 35, icon: '🍞', sku: 'SNK-RB02' },
+  { id: 'S03', name: 'Croissant Butter Flaky', category: 'snack', price: 20000, stock: 25, icon: '🥐', sku: 'SNK-CB03' },
+  { id: 'S04', name: 'Pisang Goreng Keju Crispy', category: 'snack', price: 15000, stock: 40, icon: '🍌', sku: 'SNK-PG04' },
+  { id: 'S05', name: 'Donat Cokelat Meses', category: 'snack', price: 10000, stock: 60, icon: '🍩', sku: 'SNK-DN05' },
+  { id: 'S06', name: 'Waffle Ice Cream Vanilla', category: 'snack', price: 22000, stock: 20, icon: '🧇', sku: 'SNK-WF06' }
 ];
 
 // Kunci Penyimpanan LocalStorage
 const STORAGE_KEYS = {
-  PRODUCTS: 'nexus_pos_products_v2',
-  CART: 'nexus_pos_cart_v2',
-  SETTINGS: 'nexus_pos_settings_v2',
-  HISTORY: 'nexus_pos_history_v2'
+  PRODUCTS: 'nexus_pos_products_v3',
+  CART: 'nexus_pos_cart_v3',
+  SETTINGS: 'nexus_pos_settings_v3',
+  HISTORY: 'nexus_pos_history_v3'
 };
 
 // Global Application State
@@ -248,8 +246,9 @@ function renderCatalog() {
           <button type="button" class="btn-card-action btn-del" title="Hapus Barang">🗑️</button>
         </div>
       </div>
-      <div>
-        <span class="product-cat-badge badge-${item.category}">${item.category}</span>
+        <span class="product-cat-badge badge-${item.category}">
+          ${item.category === 'food' ? 'Makanan' : (item.category === 'beverage' ? 'Minuman' : 'Snack')}
+        </span>
         <div class="product-info">
           <h4>${item.name}</h4>
           <div class="product-sku">SKU: ${item.sku || '-'}</div>
@@ -565,14 +564,16 @@ function setPaymentMethod(method) {
   if (checkoutBtn) {
     const btnSpan = checkoutBtn.querySelector('span');
     if (btnSpan) {
+      const isMobile = window.innerWidth <= 768;
+      const shortcut = isMobile ? '' : ' (F9)';
       if (method === 'cash') {
-        btnSpan.textContent = 'Bayar Tunai & Cetak Struk (F9)';
+        btnSpan.textContent = `Bayar Tunai & Cetak Struk${shortcut}`;
       } else if (method === 'qris') {
-        btnSpan.textContent = 'Konfirmasi QRIS & Cetak Struk (F9)';
+        btnSpan.textContent = `Konfirmasi QRIS & Cetak Struk${shortcut}`;
       } else if (method === 'debit') {
-        btnSpan.textContent = 'Konfirmasi Kartu & Cetak Struk (F9)';
+        btnSpan.textContent = `Konfirmasi Kartu & Cetak Struk${shortcut}`;
       } else if (method === 'transfer') {
-        btnSpan.textContent = 'Konfirmasi Transfer & Cetak Struk (F9)';
+        btnSpan.textContent = `Konfirmasi Transfer & Cetak Struk${shortcut}`;
       }
     }
   }

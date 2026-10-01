@@ -89,12 +89,34 @@
             <button type="button" class="btn-clear-search" id="btn-clear-search" title="Bersihkan pencarian">&times;</button>
           </div>
 
+          <!-- Marketplace Store Links (Shopee, Tokopedia, TikTok Shop, GoFood) -->
+          <div class="marketplace-store-strip">
+            <span class="market-strip-label">🛍️ Toko Online:</span>
+            <div class="market-links-group">
+              <a href="https://shopee.co.id" target="_blank" rel="noopener noreferrer" class="market-link-pill pill-shopee" title="Kunjungi Toko di Shopee">
+                <span class="market-dot dot-shopee"></span>
+                <span>Shopee</span>
+              </a>
+              <a href="https://www.tokopedia.com" target="_blank" rel="noopener noreferrer" class="market-link-pill pill-tokopedia" title="Kunjungi Toko di Tokopedia">
+                <span class="market-dot dot-tokopedia"></span>
+                <span>Tokopedia</span>
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="market-link-pill pill-tiktok" title="Kunjungi TikTok Shop">
+                <span class="market-dot dot-tiktok"></span>
+                <span>TikTok Shop</span>
+              </a>
+              <a href="https://gofood.co.id" target="_blank" rel="noopener noreferrer" class="market-link-pill pill-gofood" title="Pesan Delivery di GoFood">
+                <span class="market-dot dot-gofood"></span>
+                <span>GoFood</span>
+              </a>
+            </div>
+          </div>
+
           <div class="category-pills" id="category-pills">
             <button type="button" class="pill-btn active" data-category="all">Semua Menu</button>
-            <button type="button" class="pill-btn" data-category="food">Makanan</button>
-            <button type="button" class="pill-btn" data-category="beverage">Minuman</button>
-            <button type="button" class="pill-btn" data-category="retail">Retail Snack</button>
-            <button type="button" class="pill-btn" data-category="essentials">Essentials</button>
+            <button type="button" class="pill-btn" data-category="food">🍛 Makanan</button>
+            <button type="button" class="pill-btn" data-category="beverage">☕ Minuman</button>
+            <button type="button" class="pill-btn" data-category="snack">🍰 Snack &amp; Dessert</button>
           </div>
         </div>
 
@@ -238,45 +260,103 @@
               <div class="underpaid-alert" id="underpaid-alert" style="display: none;"></div>
             </div>
 
-            <!-- Panel QRIS Dinamis -->
+            <!-- Panel QRIS Dinamis (Standar Nasional Indonesia) -->
             <div class="payment-detail-panel" id="qris-panel" style="display: none;">
               <div class="qris-card">
-                <div class="qris-header-badge">QRIS STANDAR NASIONAL</div>
-                <div class="qris-qr-wrapper">
-                  <svg width="130" height="130" viewBox="0 0 130 130" fill="none" class="qris-svg">
-                    <rect width="130" height="130" fill="#ffffff"/>
-                    <!-- Finder Top-Left -->
-                    <rect x="10" y="10" width="32" height="32" fill="#0f172a"/>
-                    <rect x="15" y="15" width="22" height="22" fill="#ffffff"/>
-                    <rect x="20" y="20" width="12" height="12" fill="#0f172a"/>
-                    <!-- Finder Top-Right -->
-                    <rect x="88" y="10" width="32" height="32" fill="#0f172a"/>
-                    <rect x="93" y="15" width="22" height="22" fill="#ffffff"/>
-                    <rect x="98" y="20" width="12" height="12" fill="#0f172a"/>
-                    <!-- Finder Bottom-Left -->
-                    <rect x="10" y="88" width="32" height="32" fill="#0f172a"/>
-                    <rect x="15" y="93" width="22" height="22" fill="#ffffff"/>
-                    <rect x="20" y="98" width="12" height="12" fill="#0f172a"/>
-                    <!-- Matrix Pattern -->
-                    <rect x="50" y="15" width="8" height="8" fill="#0f172a"/>
-                    <rect x="66" y="22" width="12" height="8" fill="#0f172a"/>
-                    <rect x="50" y="38" width="28" height="8" fill="#0f172a"/>
-                    <rect x="18" y="52" width="24" height="8" fill="#0f172a"/>
-                    <rect x="52" y="55" width="10" height="20" fill="#0f172a"/>
-                    <rect x="70" y="52" width="15" height="15" fill="#0f172a"/>
-                    <rect x="95" y="52" width="24" height="10" fill="#0f172a"/>
-                    <rect x="105" y="68" width="14" height="18" fill="#0f172a"/>
-                    <rect x="52" y="85" width="20" height="10" fill="#0f172a"/>
-                    <rect x="80" y="80" width="10" height="25" fill="#0f172a"/>
-                    <rect x="52" y="102" width="28" height="15" fill="#0f172a"/>
-                    <rect x="95" y="98" width="24" height="20" fill="#0f172a"/>
-                  </svg>
+                <div class="qris-national-header">
+                  <div class="qris-banner-top">
+                    <span class="qris-logo-text">QR<span>IS</span></span>
+                    <span class="qris-subtag">STANDAR PEMBAYARAN NASIONAL</span>
+                  </div>
+                  <div class="qris-merchant-info">
+                    <span class="qris-merchant-name" id="qris-merchant-title">NEXUS RETAIL &amp; CAFE</span>
+                    <span class="qris-nmid">NMID: ID1020260987654 &bull; A01</span>
+                  </div>
                 </div>
-                <div class="qris-amount-row">
-                  <span>Nominal Tagihan:</span>
-                  <strong id="qris-amount-display">Rp 0</strong>
+
+                <div class="qris-body-content">
+                  <div class="qris-qr-wrapper">
+                    <svg width="135" height="135" viewBox="0 0 140 140" fill="none" class="qris-svg" aria-label="QRIS Barcode">
+                      <rect width="140" height="140" fill="#ffffff" rx="4"/>
+                      <!-- Finder Top-Left -->
+                      <rect x="8" y="8" width="36" height="36" fill="#0f172a" rx="4"/>
+                      <rect x="13" y="13" width="26" height="26" fill="#ffffff" rx="2"/>
+                      <rect x="18" y="18" width="16" height="16" fill="#0f172a" rx="2"/>
+                      <!-- Finder Top-Right -->
+                      <rect x="96" y="8" width="36" height="36" fill="#0f172a" rx="4"/>
+                      <rect x="101" y="13" width="26" height="26" fill="#ffffff" rx="2"/>
+                      <rect x="106" y="18" width="16" height="16" fill="#0f172a" rx="2"/>
+                      <!-- Finder Bottom-Left -->
+                      <rect x="8" y="96" width="36" height="36" fill="#0f172a" rx="4"/>
+                      <rect x="13" y="101" width="26" height="26" fill="#ffffff" rx="2"/>
+                      <rect x="18" y="106" width="16" height="16" fill="#0f172a" rx="2"/>
+                      <!-- Alignment Bottom-Right -->
+                      <rect x="100" y="100" width="24" height="24" fill="#0f172a" rx="3"/>
+                      <rect x="105" y="105" width="14" height="14" fill="#ffffff" rx="1"/>
+                      <rect x="109" y="109" width="6" height="6" fill="#0f172a"/>
+                      <!-- Timing Tracks -->
+                      <rect x="48" y="23" width="5" height="5" fill="#0f172a"/>
+                      <rect x="58" y="23" width="5" height="5" fill="#0f172a"/>
+                      <rect x="68" y="23" width="5" height="5" fill="#0f172a"/>
+                      <rect x="78" y="23" width="5" height="5" fill="#0f172a"/>
+                      <rect x="88" y="23" width="5" height="5" fill="#0f172a"/>
+                      <rect x="23" y="48" width="5" height="5" fill="#0f172a"/>
+                      <rect x="23" y="58" width="5" height="5" fill="#0f172a"/>
+                      <rect x="23" y="68" width="5" height="5" fill="#0f172a"/>
+                      <rect x="23" y="78" width="5" height="5" fill="#0f172a"/>
+                      <rect x="23" y="88" width="5" height="5" fill="#0f172a"/>
+                      <!-- Dense Data Modules Matrix -->
+                      <rect x="48" y="10" width="8" height="6" fill="#0f172a"/>
+                      <rect x="62" y="10" width="12" height="6" fill="#0f172a"/>
+                      <rect x="80" y="10" width="10" height="6" fill="#0f172a"/>
+                      <rect x="52" y="34" width="12" height="8" fill="#0f172a"/>
+                      <rect x="72" y="34" width="18" height="8" fill="#0f172a"/>
+                      <rect x="10" y="50" width="10" height="8" fill="#0f172a"/>
+                      <rect x="10" y="64" width="8" height="12" fill="#0f172a"/>
+                      <rect x="10" y="82" width="12" height="8" fill="#0f172a"/>
+                      <rect x="36" y="50" width="12" height="8" fill="#0f172a"/>
+                      <rect x="36" y="66" width="8" height="14" fill="#0f172a"/>
+                      <rect x="36" y="86" width="10" height="6" fill="#0f172a"/>
+                      <rect x="52" y="48" width="8" height="8" fill="#0f172a"/>
+                      <rect x="80" y="48" width="12" height="8" fill="#0f172a"/>
+                      <rect x="98" y="50" width="14" height="8" fill="#0f172a"/>
+                      <rect x="118" y="50" width="14" height="8" fill="#0f172a"/>
+                      <rect x="98" y="64" width="8" height="14" fill="#0f172a"/>
+                      <rect x="112" y="64" width="20" height="8" fill="#0f172a"/>
+                      <rect x="120" y="78" width="12" height="14" fill="#0f172a"/>
+                      <rect x="50" y="84" width="14" height="8" fill="#0f172a"/>
+                      <rect x="70" y="84" width="12" height="10" fill="#0f172a"/>
+                      <rect x="88" y="84" width="6" height="12" fill="#0f172a"/>
+                      <rect x="50" y="100" width="10" height="14" fill="#0f172a"/>
+                      <rect x="66" y="100" width="16" height="8" fill="#0f172a"/>
+                      <rect x="88" y="102" width="8" height="12" fill="#0f172a"/>
+                      <rect x="50" y="120" width="18" height="10" fill="#0f172a"/>
+                      <rect x="74" y="116" width="12" height="14" fill="#0f172a"/>
+                      <rect x="10" y="122" width="32" height="8" fill="#0f172a"/>
+                      <rect x="100" y="128" width="24" height="6" fill="#0f172a"/>
+                      <!-- Official Center Emblem -->
+                      <rect x="56" y="56" width="28" height="28" fill="#ffffff" stroke="#dc2626" stroke-width="2.5" rx="5"/>
+                      <text x="70" y="74" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="900" fill="#dc2626" text-anchor="middle" letter-spacing="-0.5">QRIS</text>
+                    </svg>
+                  </div>
+
+                  <div class="qris-mobile-info-col">
+                    <div class="qris-amount-row">
+                      <span>Total Bayar:</span>
+                      <strong id="qris-amount-display">Rp 0</strong>
+                    </div>
+                    <div class="qris-supported-wallets">
+                      <span class="wallet-badge">BCA</span>
+                      <span class="wallet-badge">Mandiri</span>
+                      <span class="wallet-badge">BRI</span>
+                      <span class="wallet-badge">GoPay</span>
+                      <span class="wallet-badge">OVO</span>
+                      <span class="wallet-badge">Dana</span>
+                      <span class="wallet-badge">ShopeePay</span>
+                    </div>
+                    <p class="qris-hint">Scan via aplikasi m-Banking atau e-Wallet apa saja.</p>
+                  </div>
                 </div>
-                <p class="qris-hint">Scan via GoPay, OVO, Dana, ShopeePay, BCA, atau Mobile Banking.</p>
               </div>
             </div>
 
@@ -393,6 +473,7 @@
             <div class="barcode-graphic">||||| | |||| ||| |||| | ||||| ||| |||||</div>
             <div class="barcode-text" id="receipt-barcode-text">INV-20261001-0001</div>
             <p class="footer-msg" id="receipt-footer-notes">Terima Kasih Atas Kunjungan Anda!</p>
+            <p class="footer-submsg">Order Online: Shopee &bull; Tokopedia: Nexus Cafe</p>
             <p class="footer-submsg">Barang yang sudah dibeli tidak dapat ditukar.</p>
           </div>
         </div>
@@ -427,8 +508,7 @@
               <select id="prod-category" required>
                 <option value="food">Makanan</option>
                 <option value="beverage">Minuman</option>
-                <option value="retail">Retail Snack</option>
-                <option value="essentials">Essentials</option>
+                <option value="snack">Snack &amp; Dessert</option>
               </select>
             </div>
             <div class="form-group">

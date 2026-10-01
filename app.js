@@ -133,9 +133,25 @@ function playAudioBeep(type = 'beep') {
 // Membaca seluruh data dari LocalStorage saat halaman pertama kali dimuat
 function loadState() {
   try {
-    // 1. Muat Produk
+    // Bersihkan cache lama versi 1 & 2 dari localStorage
+    localStorage.removeItem('nexus_pos_products');
+    localStorage.removeItem('nexus_pos_products_v2');
+
+    // 1. Muat Produk (Otomatis validasi & buang item dummy lama jika ada)
     const storedProducts = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
-    state.products = storedProducts ? JSON.parse(storedProducts) : [...DEFAULT_PRODUCTS];
+    if (storedProducts) {
+      const parsed = JSON.parse(storedProducts);
+      const hasOldDummy = parsed.some(p => p.category === 'essentials' || p.category === 'retail' || p.id === 'E01');
+      if (hasOldDummy || !Array.isArray(parsed) || parsed.length === 0) {
+        state.products = [...DEFAULT_PRODUCTS];
+        saveProducts();
+      } else {
+        state.products = parsed;
+      }
+    } else {
+      state.products = [...DEFAULT_PRODUCTS];
+      saveProducts();
+    }
 
     // 2. Muat Keranjang (TETAP TERSIMPAN SAAT REFRESH)
     const storedCart = localStorage.getItem(STORAGE_KEYS.CART);
@@ -246,6 +262,7 @@ function renderCatalog() {
           <button type="button" class="btn-card-action btn-del" title="Hapus Barang">🗑️</button>
         </div>
       </div>
+      <div class="product-card-body">
         <span class="product-cat-badge badge-${item.category}">
           ${item.category === 'food' ? 'Makanan' : (item.category === 'beverage' ? 'Minuman' : 'Snack')}
         </span>
@@ -255,10 +272,15 @@ function renderCatalog() {
         </div>
       </div>
       <div class="product-card-bottom">
-        <span class="product-price">${formatRupiah(item.price)}</span>
-        <span class="product-stock ${isLowStock ? 'low-stock' : ''}">
-          ${isOutOfStock ? 'Habis' : `Stok: ${item.stock}`}
-        </span>
+        <div class="product-price-col">
+          <span class="product-price">${formatRupiah(item.price)}</span>
+          <span class="product-stock ${isLowStock ? 'low-stock' : ''}">
+            ${isOutOfStock ? 'Habis' : `Stok: ${item.stock}`}
+          </span>
+        </div>
+        <button type="button" class="btn-buy-product" ${isOutOfStock ? 'disabled' : ''}>
+          ${isOutOfStock ? 'Habis' : '+ Tambah'}
+        </button>
       </div>
     `;
 

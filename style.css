@@ -564,9 +564,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   margin-top: 0.65rem;
   padding-top: 0.65rem;
   border-top: 2px solid var(--border-color);
+}
+
+.product-price-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
 .product-price {
@@ -577,19 +584,55 @@ body {
 }
 
 .product-stock {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--text-muted);
   background-color: var(--bg-subtle);
   border: 1px solid var(--border-color);
-  padding: 0.15rem 0.4rem;
+  padding: 0.12rem 0.35rem;
   border-radius: var(--radius-sm);
+  display: inline-block;
+  width: fit-content;
 }
 
 .product-stock.low-stock {
   color: var(--danger);
   border-color: var(--danger);
   background-color: var(--danger-bg);
+}
+
+.btn-buy-product {
+  padding: 0.4rem 0.75rem;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: 2px solid #1e40af;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s ease, transform 0.1s ease;
+}
+
+.btn-buy-product:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-buy-product:active {
+  transform: scale(0.94);
+}
+
+.btn-buy-product:disabled {
+  background-color: #cbd5e1;
+  border-color: #94a3b8;
+  color: #64748b;
+  cursor: not-allowed;
 }
 
 /* Empty State */

@@ -2,6 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#ffffff">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261001_v5">
+  <link rel="stylesheet" href="style.css?v=20261001_v10_cafe">
 </head>
 <body>
   <div class="pos-app">
@@ -27,7 +31,7 @@
           </div>
           <div class="brand-info">
             <h1 id="topbar-store-name">NEXUS RETAIL &amp; CAFE</h1>
-            <span class="badge-store-type">Sistem Kasir Interaktif (HTML, CSS, JS Native + LocalStorage)</span>
+            <span class="badge-store-type">Official Cafe &amp; Retail Store</span>
           </div>
         </div>
 
@@ -40,6 +44,12 @@
         </div>
 
         <div class="topbar-actions">
+          <button type="button" class="btn btn-warning-update" id="btn-force-refresh" title="Muat Versi Terbaru & Bersihkan Cache">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span>Update Versi</span>
+          </button>
           <button type="button" class="btn btn-outline" id="btn-open-history" title="Riwayat Penjualan">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -640,6 +650,6 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <script src="app.js?v=20261001_v5"></script>
+  <script src="app.js?v=20261001_v10_cafe"></script>
 </body>
 </html>

@@ -32,12 +32,16 @@ const DEFAULT_PRODUCTS = [
   { id: 'S06', name: 'Waffle Ice Cream Vanilla', category: 'snack', price: 22000, stock: 20, icon: '🧇', sku: 'SNK-WF06' }
 ];
 
+// Versi Rilis Aplikasi (Digunakan untuk migrasi otomatis memori browser)
+const APP_VERSION = '20261001_v10_cafe';
+
 // Kunci Penyimpanan LocalStorage
 const STORAGE_KEYS = {
-  PRODUCTS: 'nexus_pos_products_v3',
-  CART: 'nexus_pos_cart_v3',
-  SETTINGS: 'nexus_pos_settings_v3',
-  HISTORY: 'nexus_pos_history_v3'
+  VERSION: 'nexus_pos_app_ver',
+  PRODUCTS: 'nexus_pos_products_v4',
+  CART: 'nexus_pos_cart_v4',
+  SETTINGS: 'nexus_pos_settings_v4',
+  HISTORY: 'nexus_pos_history_v4'
 };
 
 // Global Application State
@@ -133,15 +137,24 @@ function playAudioBeep(type = 'beep') {
 // Membaca seluruh data dari LocalStorage saat halaman pertama kali dimuat
 function loadState() {
   try {
-    // Bersihkan cache lama versi 1 & 2 dari localStorage
-    localStorage.removeItem('nexus_pos_products');
-    localStorage.removeItem('nexus_pos_products_v2');
+    const savedVer = localStorage.getItem(STORAGE_KEYS.VERSION);
+    if (savedVer !== APP_VERSION) {
+      // Hapus seluruh cache produk & keranjang versi lawas (v1, v2, v3) agar data bersih
+      localStorage.removeItem('nexus_pos_products');
+      localStorage.removeItem('nexus_pos_products_v2');
+      localStorage.removeItem('nexus_pos_products_v3');
+      localStorage.removeItem('nexus_pos_cart');
+      localStorage.removeItem('nexus_pos_cart_v2');
+      localStorage.removeItem('nexus_pos_cart_v3');
+      localStorage.setItem(STORAGE_KEYS.VERSION, APP_VERSION);
+      localStorage.removeItem(STORAGE_KEYS.PRODUCTS);
+    }
 
-    // 1. Muat Produk (Otomatis validasi & buang item dummy lama jika ada)
+    // 1. Muat Produk (Otomatis validasi & buang item dummy non-makanan jika ada)
     const storedProducts = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
     if (storedProducts) {
       const parsed = JSON.parse(storedProducts);
-      const hasOldDummy = parsed.some(p => p.category === 'essentials' || p.category === 'retail' || p.id === 'E01');
+      const hasOldDummy = parsed.some(p => p.category === 'essentials' || p.category === 'retail' || p.id === 'E01' || p.id === 'R01');
       if (hasOldDummy || !Array.isArray(parsed) || parsed.length === 0) {
         state.products = [...DEFAULT_PRODUCTS];
         saveProducts();
@@ -550,6 +563,7 @@ function calculateTotals() {
 
   if (floatBar && floatQty && floatTotal) {
     if (state.cart.length > 0) {
+      floatBar.style.display = '';
       floatBar.classList.add('has-items');
       floatQty.textContent = `${totalItemCount} Item di Keranjang`;
       floatTotal.textContent = formattedGrand;
@@ -1232,6 +1246,24 @@ function setupEventListeners() {
       showToast('Riwayat transaksi dibersihkan', 'info');
     }
   });
+
+  // Tombol Paksa Update Versi Baru & Bersihkan Cache
+  const btnForceRefresh = document.getElementById('btn-force-refresh');
+  if (btnForceRefresh) {
+    btnForceRefresh.addEventListener('click', () => {
+      showToast('⚡ Memuat versi terbaru dan mereset cache...', 'info');
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (err) {
+        console.error('Gagal membersihkan storage:', err);
+      }
+      setTimeout(() => {
+        const cleanBase = window.location.origin + window.location.pathname;
+        window.location.replace(`${cleanBase}?v=${Date.now()}`);
+      }, 250);
+    });
+  }
 
   // Pengaturan Toko Modal
   document.getElementById('btn-open-settings').addEventListener('click', () => openModal('modal-settings'));

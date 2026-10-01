@@ -1524,18 +1524,28 @@ body {
 }
 
 @media (max-width: 768px) {
-  body {
-    overflow: auto;
-    height: 100vh;
+  /* Hapus height lock 100vh & overflow hidden agar Android bisa scroll lancar */
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .pos-app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
   }
 
   .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     padding: 0.5rem 0.75rem;
   }
 
@@ -1562,37 +1572,89 @@ body {
     padding: 0.45rem 0.6rem;
   }
 
-  /* Show Segmented Mobile Tab Bar */
+  /* Segmented Mobile Tab Bar (Sticky di bawah topbar) */
   .mobile-nav-bar {
-    display: flex;
+    display: flex !important;
+    position: sticky;
+    top: 50px;
+    z-index: 45;
   }
 
   .pos-layout {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 105px);
-    overflow: hidden;
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
-  /* Switchable Tabs: Catalog vs Cart */
+  /* Tampilan Katalog di Layar HP */
+  body:not(.mobile-view-cart) .catalog-section {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 110px) !important;
+    overflow: visible !important;
+    border-right: none !important;
+    padding-bottom: 95px !important; /* Ruang agar kartu barang paling bawah tidak tertutup floating bar */
+  }
+
+  body:not(.mobile-view-cart) .products-scroll-area {
+    height: auto !important;
+    overflow: visible !important;
+    flex: none !important;
+    padding: 0.75rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
   body:not(.mobile-view-cart) .cart-section {
     display: none !important;
   }
 
-  body:not(.mobile-view-cart) .catalog-section {
-    display: flex !important;
-    height: 100%;
-    border-right: none;
-  }
-
+  /* Tampilan Keranjang di Layar HP */
   body.mobile-view-cart .catalog-section {
     display: none !important;
   }
 
   body.mobile-view-cart .cart-section {
     display: flex !important;
-    height: 100%;
-    border-left: none;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 110px) !important;
+    overflow: visible !important;
+    border-left: none !important;
+    padding-bottom: 40px !important;
+  }
+
+  body.mobile-view-cart .cart-items-container {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    flex: none !important;
+    padding: 0.75rem !important;
+  }
+
+  body.mobile-view-cart .cart-footer {
+    margin-top: auto !important;
+    position: static !important;
+    box-shadow: none !important;
+    border-top: 2px solid var(--border-dark) !important;
+  }
+
+  /* Floating Bar di HP */
+  body:not(.mobile-view-cart) .mobile-floating-cart-bar.has-items {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 99 !important;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2) !important;
+    padding: 0.75rem 1rem !important;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  body.mobile-view-cart .mobile-floating-cart-bar {
+    display: none !important;
   }
 
   .products-grid {

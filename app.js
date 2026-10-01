@@ -469,12 +469,21 @@ function calculateTotals() {
   }
 
   const grandTotal = taxableAmount + taxAmount;
+  const formattedGrand = formatRupiah(grandTotal);
 
   // Update Nilai ke UI
   document.getElementById('calc-subtotal').textContent = formatRupiah(subtotal);
   document.getElementById('calc-discount').textContent = `- ${formatRupiah(discountAmount)}`;
   document.getElementById('calc-tax').textContent = `+ ${formatRupiah(taxAmount)}`;
-  document.getElementById('calc-grand-total').textContent = formatRupiah(grandTotal);
+  document.getElementById('calc-grand-total').textContent = formattedGrand;
+
+  // Sinkronisasi Display Tagihan Non-Tunai (QRIS, Debit EDC, Transfer Bank)
+  const qrisAmt = document.getElementById('qris-amount-display');
+  const debitAmt = document.getElementById('debit-amount-display');
+  const transferAmt = document.getElementById('transfer-amount-display');
+  if (qrisAmt) qrisAmt.textContent = formattedGrand;
+  if (debitAmt) debitAmt.textContent = formattedGrand;
+  if (transferAmt) transferAmt.textContent = formattedGrand;
 
   // Validasi Pembayaran Tunai & Kembalian
   const checkoutBtn = document.getElementById('btn-process-checkout');
@@ -522,7 +531,7 @@ function calculateTotals() {
     if (state.cart.length > 0) {
       floatBar.classList.add('has-items');
       floatQty.textContent = `${totalItemCount} Item di Keranjang`;
-      floatTotal.textContent = formatRupiah(grandTotal);
+      floatTotal.textContent = formattedGrand;
     } else {
       floatBar.classList.remove('has-items');
       floatBar.style.display = 'none';
@@ -535,15 +544,37 @@ function calculateTotals() {
 function setPaymentMethod(method) {
   state.paymentMethod = method;
 
+  // Update Status Aktif Tombol Metode Pembayaran
   document.querySelectorAll('.btn-pay-method').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-method') === method);
   });
 
+  // Tampilkan Panel Interaktif Sesuai Pilihan (Tunai, QRIS, Debit, Transfer)
   const cashPanel = document.getElementById('cash-input-panel');
-  if (method === 'cash') {
-    cashPanel.style.display = 'flex';
-  } else {
-    cashPanel.style.display = 'none';
+  const qrisPanel = document.getElementById('qris-panel');
+  const debitPanel = document.getElementById('debit-panel');
+  const transferPanel = document.getElementById('transfer-panel');
+
+  if (cashPanel) cashPanel.style.display = (method === 'cash') ? 'flex' : 'none';
+  if (qrisPanel) qrisPanel.style.display = (method === 'qris') ? 'flex' : 'none';
+  if (debitPanel) debitPanel.style.display = (method === 'debit') ? 'flex' : 'none';
+  if (transferPanel) transferPanel.style.display = (method === 'transfer') ? 'flex' : 'none';
+
+  // Perbarui Label Tombol Checkout Sesuai Metode
+  const checkoutBtn = document.getElementById('btn-process-checkout');
+  if (checkoutBtn) {
+    const btnSpan = checkoutBtn.querySelector('span');
+    if (btnSpan) {
+      if (method === 'cash') {
+        btnSpan.textContent = 'Bayar Tunai & Cetak Struk (F9)';
+      } else if (method === 'qris') {
+        btnSpan.textContent = 'Konfirmasi QRIS & Cetak Struk (F9)';
+      } else if (method === 'debit') {
+        btnSpan.textContent = 'Konfirmasi Kartu & Cetak Struk (F9)';
+      } else if (method === 'transfer') {
+        btnSpan.textContent = 'Konfirmasi Transfer & Cetak Struk (F9)';
+      }
+    }
   }
 
   calculateTotals();
@@ -1061,15 +1092,18 @@ function setupEventListeners() {
   if (btnTabCart) btnTabCart.addEventListener('click', () => switchMobileTab('cart'));
   if (btnOpenCartFloating) btnOpenCartFloating.addEventListener('click', () => switchMobileTab('cart'));
 
-  // Filter Kategori
-  document.getElementById('category-pills').addEventListener('click', (e) => {
-    if (e.target.classList.contains('pill-btn')) {
+  // Filter Kategori (Gunakan closest agar emoji/teks di dalam tombol tetap memicu aksi)
+  const categoryPillsContainer = document.getElementById('category-pills');
+  if (categoryPillsContainer) {
+    categoryPillsContainer.addEventListener('click', (e) => {
+      const pill = e.target.closest('.pill-btn');
+      if (!pill) return;
       document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-      e.target.classList.add('active');
-      state.activeCategory = e.target.getAttribute('data-category');
+      pill.classList.add('active');
+      state.activeCategory = pill.getAttribute('data-category') || 'all';
       renderCatalog();
-    }
-  });
+    });
+  }
 
   // Reset Keranjang
   document.getElementById('btn-clear-cart').addEventListener('click', clearCart);
@@ -1100,9 +1134,23 @@ function setupEventListeners() {
     calculateTotals();
   });
 
-  // Metode Pembayaran
+  // Metode Pembayaran (Delegasi event + direct listener untuk kehandalan penuh di HP & Laptop)
+  const paymentContainer = document.querySelector('.payment-methods');
+  if (paymentContainer) {
+    paymentContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-pay-method');
+      if (btn) {
+        const method = btn.getAttribute('data-method');
+        if (method) setPaymentMethod(method);
+      }
+    });
+  }
+
   document.querySelectorAll('.btn-pay-method').forEach(btn => {
-    btn.addEventListener('click', () => setPaymentMethod(btn.getAttribute('data-method')));
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setPaymentMethod(btn.getAttribute('data-method'));
+    });
   });
 
   // Input Uang Tunai
@@ -1208,12 +1256,19 @@ function setupEventListeners() {
   });
 }
 
-// Inisialisasi Aplikasi Saat Halaman Selesai Dimuat
-document.addEventListener('DOMContentLoaded', () => {
+// Inisialisasi Aplikasi Secara Handal (Cek readyState untuk browser mobile & desktop)
+function initApp() {
   loadState();
   startClock();
   setupEventListeners();
   renderCatalog();
   renderCart();
   calculateTotals();
-});
+  setPaymentMethod(state.paymentMethod || 'cash');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

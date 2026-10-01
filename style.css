@@ -58,6 +58,14 @@ body {
   height: 100vh;
 }
 
+/* Header Master Wrapper (Sticky Container for Topbar + Mobile Nav) */
+.header-master {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--bg-surface);
+}
+
 /* Topbar Header */
 .topbar {
   display: flex;
@@ -66,7 +74,6 @@ body {
   padding: 0.75rem 1.5rem;
   background-color: var(--bg-surface);
   border-bottom: 2px solid var(--border-dark);
-  z-index: 10;
   gap: 1rem;
 }
 
@@ -301,19 +308,29 @@ body {
 }
 
 .pill-btn {
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1.1rem;
   background-color: var(--bg-surface);
   border: 2px solid var(--border-dark);
   border-radius: var(--radius-md);
   color: var(--text-main);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .pill-btn:hover {
   background-color: var(--bg-hover);
+}
+
+.pill-btn:active {
+  transform: scale(0.97);
 }
 
 .pill-btn.active {
@@ -347,6 +364,8 @@ body {
   position: relative;
   cursor: pointer;
   user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.1s ease, border-color 0.1s ease;
 }
 
@@ -846,19 +865,31 @@ body {
 }
 
 .btn-pay-method {
-  padding: 0.5rem 0.2rem;
+  padding: 0.6rem 0.25rem;
+  min-height: 42px;
   background-color: var(--bg-subtle);
   border: 2px solid var(--border-dark);
   border-radius: var(--radius-sm);
   color: var(--text-main);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   text-align: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s ease, transform 0.1s ease;
 }
 
 .btn-pay-method:hover {
   background-color: var(--bg-hover);
+}
+
+.btn-pay-method:active {
+  transform: scale(0.96);
 }
 
 .btn-pay-method.active {
@@ -977,6 +1008,115 @@ body {
   border: 1px solid var(--danger);
   border-radius: var(--radius-sm);
   text-align: center;
+}
+
+/* Detail Panel Pembayaran Non-Tunai (QRIS, Debit EDC, Transfer) */
+.payment-detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qris-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  border: 2px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.5rem;
+}
+
+.qris-header-badge {
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.qris-qr-wrapper {
+  padding: 0.4rem;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qris-svg {
+  display: block;
+}
+
+.qris-amount-row,
+.non-cash-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.qris-amount-row strong,
+.non-cash-amount-row strong {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: var(--primary);
+  font-weight: 900;
+}
+
+.qris-hint,
+.non-cash-hint {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.non-cash-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  border: 2px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+}
+
+.non-cash-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.bank-account-box {
+  background-color: #f1f5f9;
+  border: 1px dashed var(--border-dark);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-main);
 }
 
 .btn-checkout {
@@ -1542,10 +1682,18 @@ body {
     overflow: visible !important;
   }
 
+  .header-master {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 60 !important;
+    background-color: var(--bg-surface) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
   .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
     padding: 0.5rem 0.75rem;
   }
 
@@ -1572,12 +1720,16 @@ body {
     padding: 0.45rem 0.6rem;
   }
 
-  /* Segmented Mobile Tab Bar (Sticky di bawah topbar) */
+  /* Segmented Mobile Tab Bar (Di dalam header-master, menyatu tanpa tumpang tindih) */
   .mobile-nav-bar {
     display: flex !important;
-    position: sticky;
-    top: 50px;
-    z-index: 45;
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
+    padding: 0.4rem 0.75rem !important;
+    background-color: var(--bg-surface) !important;
+    border-bottom: 2px solid var(--border-dark) !important;
+    gap: 0.5rem;
   }
 
   .pos-layout {

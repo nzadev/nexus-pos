@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>NexusPOS - Sistem Kasir Retail & F&B</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="pos-app">
+    <!-- Topbar Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1 id="topbar-store-name">NEXUS RETAIL &amp; CAFE</h1>
+          <span class="badge-store-type">Sistem Kasir Interaktif (HTML, CSS, JS Native + LocalStorage)</span>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <div class="live-clock" id="live-clock">00:00:00</div>
+        <div class="topbar-badge">
+          <span class="status-dot"></span>
+          <span>Kasir: <strong id="cashier-name">Kasir 01</strong></span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button type="button" class="btn btn-outline" id="btn-open-history" title="Riwayat Penjualan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span class="btn-text-desktop">Riwayat (<span id="history-count">0</span>)</span>
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-add-product" title="Tambah Barang Baru">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span class="btn-text-desktop">+ Barang</span>
+        </button>
+        <button type="button" class="btn btn-icon" id="btn-open-settings" title="Pengaturan Toko">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigasi Tab Segmented untuk Layar HP -->
+    <nav class="mobile-nav-bar" id="mobile-nav-bar" aria-label="Navigasi Tampilan Mobile">
+      <button type="button" class="mobile-nav-btn active" id="btn-tab-catalog">
+        <span>📦 Katalog Menu</span>
+      </button>
+      <button type="button" class="mobile-nav-btn" id="btn-tab-cart">
+        <span>🛒 Keranjang (<strong id="mobile-cart-badge">0</strong>)</span>
+      </button>
+    </nav>
+
+    <!-- Main POS Layout: Split Screen -->
+    <main class="pos-layout">
+      <!-- LEFT SECTION: Catalog & Search -->
+      <section class="catalog-section" aria-label="Katalog Barang">
+        <!-- Controls: Search & Category Filter -->
+        <div class="catalog-controls">
+          <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="catalog-search" placeholder="Cari nama barang/menu, atau scan Barcode lalu tekan Enter..." autocomplete="off">
+            <button type="button" class="btn-clear-search" id="btn-clear-search" title="Bersihkan pencarian">&times;</button>
+          </div>
+
+          <div class="category-pills" id="category-pills">
+            <button type="button" class="pill-btn active" data-category="all">Semua Menu</button>
+            <button type="button" class="pill-btn" data-category="food">Makanan</button>
+            <button type="button" class="pill-btn" data-category="beverage">Minuman</button>
+            <button type="button" class="pill-btn" data-category="retail">Retail Snack</button>
+            <button type="button" class="pill-btn" data-category="essentials">Essentials</button>
+          </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div class="products-scroll-area">
+          <div class="products-grid" id="products-grid">
+            <!-- Dynamic product cards rendered by JS -->
+          </div>
+          <div class="empty-state" id="catalog-empty-state" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <h3>Barang tidak ditemukan</h3>
+            <p>Coba kata kunci lain atau pilih kategori yang berbeda.</p>
+          </div>
+        </div>
+
+        <!-- Floating Mobile Checkout Bar -->
+        <div class="mobile-floating-cart-bar" id="mobile-floating-cart-bar" style="display: none;">
+          <div class="m-cart-info">
+            <span class="m-cart-qty" id="m-float-qty">0 Item</span>
+            <span class="m-cart-total" id="m-float-total">Rp 0</span>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-m-open-cart">
+            Buka Keranjang &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT SECTION: Cart & Quick Checkout -->
+      <aside class="cart-section" aria-label="Keranjang Belanja">
+        <div class="cart-header">
+          <div class="cart-title-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <h2>Pesanan Kasir</h2>
+          </div>
+          <div class="cart-badge-wrap">
+            <span class="cart-count-badge" id="cart-item-count">0 Item</span>
+            <button type="button" class="btn-clear-cart" id="btn-clear-cart" title="Kosongkan Keranjang">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cart Items List (Persisted in localStorage) -->
+        <div class="cart-items-container" id="cart-items-container">
+          <div class="cart-empty-state" id="cart-empty-state">
+            <div class="cart-empty-graphic">🛒</div>
+            <h4>Keranjang Masih Kosong</h4>
+            <p>Klik salah satu produk pada katalog untuk mulai bertransaksi.</p>
+          </div>
+        </div>
+
+        <!-- Financial Calculations & Checkout -->
+        <div class="cart-footer">
+          <div class="calculation-controls">
+            <div class="calc-row">
+              <span>Subtotal:</span>
+              <span class="calc-value" id="calc-subtotal">Rp 0</span>
+            </div>
+
+            <!-- Diskon -->
+            <div class="calc-row discount-row">
+              <div class="calc-label-action">
+                <span>Diskon:</span>
+                <select id="discount-select" class="calc-select" aria-label="Pilih Diskon">
+                  <option value="0">0%</option>
+                  <option value="5">5%</option>
+                  <option value="10">10%</option>
+                  <option value="15">15%</option>
+                  <option value="20">20%</option>
+                  <option value="custom">Nominal (Rp)</option>
+                </select>
+                <input type="number" id="discount-custom-input" class="calc-input-compact" placeholder="Nominal" min="0" style="display: none;">
+              </div>
+              <span class="calc-value text-discount" id="calc-discount">- Rp 0</span>
+            </div>
+
+            <!-- PPN -->
+            <div class="calc-row tax-row">
+              <div class="calc-label-action">
+                <label class="toggle-checkbox-label">
+                  <input type="checkbox" id="tax-toggle" checked>
+                  <span>PPN (<span id="tax-rate-label">11</span>%)</span>
+                </label>
+              </div>
+              <span class="calc-value" id="calc-tax">+ Rp 0</span>
+            </div>
+
+            <div class="calc-divider"></div>
+
+            <!-- Grand Total -->
+            <div class="calc-row grand-total-row">
+              <div class="total-title">
+                <span>TOTAL AKHIR:</span>
+                <small id="total-qty-summary">0 item terpilih</small>
+              </div>
+              <span class="grand-total-amount" id="calc-grand-total">Rp 0</span>
+            </div>
+          </div>
+
+          <!-- Payment Box -->
+          <div class="payment-box">
+            <div class="payment-methods">
+              <button type="button" class="btn-pay-method active" data-method="cash">💵 Tunai</button>
+              <button type="button" class="btn-pay-method" data-method="qris">📱 QRIS</button>
+              <button type="button" class="btn-pay-method" data-method="debit">💳 Debit</button>
+              <button type="button" class="btn-pay-method" data-method="transfer">🏦 Transfer</button>
+            </div>
+
+            <!-- Cash Input Panel -->
+            <div class="cash-input-panel" id="cash-input-panel">
+              <div class="cash-input-wrapper">
+                <label for="cash-given-input">Uang Diterima:</label>
+                <div class="input-money-group">
+                  <span class="currency-prefix">Rp</span>
+                  <input type="number" id="cash-given-input" placeholder="0" min="0" step="500">
+                </div>
+              </div>
+
+              <!-- Quick Cash Chips -->
+              <div class="quick-cash-chips" id="quick-cash-chips">
+                <button type="button" class="cash-chip" data-type="exact">Uang Pas</button>
+                <button type="button" class="cash-chip" data-amount="20000">20.000</button>
+                <button type="button" class="cash-chip" data-amount="50000">50.000</button>
+                <button type="button" class="cash-chip" data-amount="100000">100.000</button>
+                <button type="button" class="cash-chip" data-amount="200000">200.000</button>
+              </div>
+
+              <!-- Real-time Change Output -->
+              <div class="change-display-box" id="change-display-box">
+                <div class="change-label">Kembalian:</div>
+                <div class="change-amount" id="calc-change">Rp 0</div>
+              </div>
+              <div class="underpaid-alert" id="underpaid-alert" style="display: none;"></div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button type="button" class="btn btn-primary btn-checkout" id="btn-process-checkout" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>Bayar &amp; Cetak Struk (F9)</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- MODAL: RECEIPT & THERMAL PRINT -->
+  <div class="modal-backdrop" id="modal-receipt">
+    <div class="modal-dialog modal-receipt-dialog">
+      <div class="modal-header">
+        <h3>🧾 Struk Transaksi Selesai</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-receipt">&times;</button>
+      </div>
+
+      <div class="modal-body receipt-scroll">
+        <!-- THERMAL RECEIPT CONTAINER -->
+        <div class="thermal-receipt" id="printable-thermal-receipt">
+          <div class="receipt-header">
+            <h2 class="store-title" id="receipt-store-name">NEXUS RETAIL &amp; CAFE</h2>
+            <p class="store-address" id="receipt-store-address">Jl. Boulevard Utama No. 88, Jakarta</p>
+            <p class="store-contact" id="receipt-store-phone">Telp: 0812-3456-7890</p>
+            <div class="receipt-divider-dashed"></div>
+            <div class="receipt-meta-grid">
+              <div>No: <span id="receipt-invoice-id">INV-000000</span></div>
+              <div class="text-right" id="receipt-date-time">01/10/2026 14:00</div>
+              <div>Kasir: <span id="receipt-cashier">Kasir 01</span></div>
+              <div class="text-right">Bayar: <span id="receipt-pay-method">TUNAI</span></div>
+            </div>
+            <div class="receipt-divider-dashed"></div>
+          </div>
+
+          <div class="receipt-items-table">
+            <div class="receipt-table-header">
+              <span>Item</span>
+              <span>Qty</span>
+              <span class="text-right">Harga</span>
+              <span class="text-right">Total</span>
+            </div>
+            <div class="receipt-divider-dotted"></div>
+            <div id="receipt-items-rows"></div>
+            <div class="receipt-divider-dotted"></div>
+          </div>
+
+          <div class="receipt-totals-table">
+            <div class="r-row">
+              <span>Subtotal:</span>
+              <span id="receipt-subtotal">Rp 0</span>
+            </div>
+            <div class="r-row" id="receipt-discount-row">
+              <span>Diskon:</span>
+              <span id="receipt-discount">- Rp 0</span>
+            </div>
+            <div class="r-row" id="receipt-tax-row">
+              <span>PPN (11%):</span>
+              <span id="receipt-tax">Rp 0</span>
+            </div>
+            <div class="receipt-divider-solid"></div>
+            <div class="r-row r-grand-total">
+              <span>TOTAL:</span>
+              <span id="receipt-grand-total">Rp 0</span>
+            </div>
+            <div class="r-row">
+              <span>Bayar:</span>
+              <span id="receipt-cash-given">Rp 0</span>
+            </div>
+            <div class="r-row r-change">
+              <span>KEMBALIAN:</span>
+              <span id="receipt-change">Rp 0</span>
+            </div>
+          </div>
+
+          <div class="receipt-divider-dashed"></div>
+
+          <div class="receipt-footer">
+            <div class="barcode-graphic">||||| | |||| ||| |||| | ||||| ||| |||||</div>
+            <div class="barcode-text" id="receipt-barcode-text">INV-20261001-0001</div>
+            <p class="footer-msg" id="receipt-footer-notes">Terima Kasih Atas Kunjungan Anda!</p>
+            <p class="footer-submsg">Barang yang sudah dibeli tidak dapat ditukar.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btn-copy-receipt">Salin Text</button>
+        <button type="button" class="btn btn-outline" id="btn-print-receipt">Cetak Struk (Print)</button>
+        <button type="button" class="btn btn-primary" id="btn-new-transaction">Transaksi Baru</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT PRODUCT (With Strict Form Validation) -->
+  <div class="modal-backdrop" id="modal-product-form">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="product-form-title">✨ Tambah Barang / Menu Baru</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-product-form">&times;</button>
+      </div>
+      <form id="form-product" novalidate>
+        <input type="hidden" id="prod-form-mode" value="add">
+        <input type="hidden" id="prod-form-id" value="">
+        <div class="modal-body form-grid">
+          <div class="form-group">
+            <label for="prod-name">Nama Barang / Menu *</label>
+            <input type="text" id="prod-name" placeholder="Misal: Es Kopi Susu Creamy" required minlength="2">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="prod-category">Kategori *</label>
+              <select id="prod-category" required>
+                <option value="food">Makanan</option>
+                <option value="beverage">Minuman</option>
+                <option value="retail">Retail Snack</option>
+                <option value="essentials">Essentials</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prod-price">Harga Jual (Rp) *</label>
+              <input type="number" id="prod-price" placeholder="15000" min="500" step="500" required>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="prod-stock">Jumlah Stok *</label>
+              <input type="number" id="prod-stock" placeholder="50" min="0" value="50" required>
+            </div>
+            <div class="form-group">
+              <label for="prod-icon">Emoji Ikon</label>
+              <input type="text" id="prod-icon" placeholder="☕ / 🍔 / 🍿 / 🛍️" maxlength="4" value="🏷️">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="prod-sku">Kode SKU / Barcode *</label>
+            <input type="text" id="prod-sku" placeholder="Misal: 8991234567" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-cancel-product-form">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-product">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SALES HISTORY & LAPORAN -->
+  <div class="modal-backdrop" id="modal-history">
+    <div class="modal-dialog modal-wide-dialog">
+      <div class="modal-header">
+        <div class="header-with-badge">
+          <h3>📜 Riwayat Penjualan &amp; Laporan</h3>
+          <span class="badge-accent" id="history-total-sales-badge">Omset: Rp 0</span>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-history">&times;</button>
+      </div>
+      <div class="modal-body history-body">
+        <div class="history-stats-bar">
+          <div class="stat-card">
+            <span class="stat-title">Total Transaksi</span>
+            <span class="stat-val" id="stat-total-orders">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-title">Total Pendapatan</span>
+            <span class="stat-val text-success" id="stat-total-revenue">Rp 0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-title">Metode Terpopuler</span>
+            <span class="stat-val" id="stat-popular-method">Tunai</span>
+          </div>
+          <div class="stat-actions">
+            <button type="button" class="btn btn-outline btn-sm" id="btn-export-history">Unduh CSV</button>
+            <button type="button" class="btn btn-danger-outline btn-sm" id="btn-clear-history">Hapus Riwayat</button>
+          </div>
+        </div>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Waktu</th>
+                <th>Item Belanja</th>
+                <th>Metode</th>
+                <th>Total</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body"></tbody>
+          </table>
+          <div class="empty-state" id="history-empty-state" style="display: none;">
+            <p>Belum ada riwayat transaksi yang tersimpan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS -->
+  <div class="modal-backdrop" id="modal-settings">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>⚙️ Pengaturan Toko &amp; Kasir</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-settings">&times;</button>
+      </div>
+      <form id="form-settings">
+        <div class="modal-body form-grid">
+          <div class="form-group">
+            <label for="setting-store-name">Nama Toko / Usaha *</label>
+            <input type="text" id="setting-store-name" value="NEXUS RETAIL & CAFE" required>
+          </div>
+          <div class="form-group">
+            <label for="setting-store-address">Alamat Toko</label>
+            <input type="text" id="setting-store-address" value="Jl. Boulevard Utama No. 88, Jakarta">
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="setting-store-phone">Nomor Telepon</label>
+              <input type="text" id="setting-store-phone" value="0812-3456-7890">
+            </div>
+            <div class="form-group">
+              <label for="setting-cashier-name">Nama Kasir Bertugas</label>
+              <input type="text" id="setting-cashier-name" value="Kasir 01">
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="setting-tax-rate">Persentase PPN (%)</label>
+              <input type="number" id="setting-tax-rate" value="11" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label for="setting-footer-notes">Pesan Kaki Struk</label>
+              <input type="text" id="setting-footer-notes" value="Terima Kasih Atas Kunjungan Anda!">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger-outline" id="btn-reset-default-data">Reset Katalog Bawaan</button>
+          <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
